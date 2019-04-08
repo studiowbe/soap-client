@@ -32,7 +32,7 @@ class Envelope
     public function asXmlString(): string
     {
         return ArrayToXml::convert([
-            'soap:body' => $this->getBody(),
+            'soap:Body' => $this->getBody(),
         ], [
             'rootElementName' => 'soap:Envelope',
             '_attributes' => $this->getAttributes(),

@@ -22,7 +22,7 @@ class RequestTest extends TestCase
             new Envelope($data)
         );
 
-        $expectedBody = '<?xml version="1.0"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:body><Action><type>test</type></Action></soap:body></soap:Envelope>';
+        $expectedBody = '<?xml version="1.0"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><Action><type>test</type></Action></soap:Body></soap:Envelope>';
 
         $this->assertEquals($action, $request->getAction());
 

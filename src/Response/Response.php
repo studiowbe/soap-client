@@ -38,7 +38,7 @@ class Response
         $status = $response->getStatusCode();
         $reason = $response->getReasonPhrase();
 
-        if ($response->getHeader('Content-Type') === 'text/xml') {
+        if (substr($response->getHeader('Content-Type')[0], 0, 8) === 'text/xml') {
             $content = str_replace(['<soap:', '</soap:'], ['<', '</'], $response->getBody()->getContents());
 
             $bodyXml = simplexml_load_string($content, SimpleXMLElement::class, LIBXML_NOCDATA);

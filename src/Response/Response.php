@@ -38,11 +38,15 @@ class Response
         $status = $response->getStatusCode();
         $reason = $response->getReasonPhrase();
 
-        $content = str_replace(['<soap:', '</soap:'], ['<', '</'], $response->getBody()->getContents());
+        if ($response->getHeader('Content-Type') === 'text/xml') {
+            $content = str_replace(['<soap:', '</soap:'], ['<', '</'], $response->getBody()->getContents());
 
-        $bodyXml = simplexml_load_string($content, SimpleXMLElement::class, LIBXML_NOCDATA);
-        $body = json_decode(json_encode($bodyXml), true);
+            $bodyXml = simplexml_load_string($content, SimpleXMLElement::class, LIBXML_NOCDATA);
+            $body = json_decode(json_encode($bodyXml), true);
 
-        return new static($body['Body'], $status, $reason);
+            return new static($body['Body'], $status, $reason);
+        }
+        //non-xml response, return response with empty body
+        return new static([], $status, $reason);
     }
 }

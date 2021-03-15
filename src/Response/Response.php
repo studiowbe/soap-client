@@ -35,6 +35,11 @@ class Response
         return $this->body;
     }
 
+    public function getRaw(): string
+    {
+        return $this->raw;
+    }
+
     public static function fromHttpResponse(ResponseInterface $response)
     {
         $status = $response->getStatusCode();

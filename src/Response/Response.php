@@ -10,12 +10,14 @@ class Response
     private $statusCode;
     private $reasonPhrase;
     private $body;
+    private $raw;
 
-    public function __construct(array $body, int $status, string $reasonPhrase)
+    public function __construct(array $body, int $status, string $reasonPhrase, string $raw)
     {
         $this->body = $body;
         $this->statusCode = $status;
         $this->reasonPhrase = $reasonPhrase;
+        $this->raw = $raw;
     }
 
     public function getStatusCode(): int
@@ -37,16 +39,16 @@ class Response
     {
         $status = $response->getStatusCode();
         $reason = $response->getReasonPhrase();
-
+        $raw = $response->getBody()->getContents();
         if (substr($response->getHeader('Content-Type')[0], 0, 8) === 'text/xml') {
-            $content = str_replace(['<soap:', '</soap:'], ['<', '</'], $response->getBody()->getContents());
+            $content = str_replace(['<soap:', '</soap:'], ['<', '</'], $raw);
 
             $bodyXml = simplexml_load_string($content, SimpleXMLElement::class, LIBXML_NOCDATA);
             $body = json_decode(json_encode($bodyXml), true);
 
-            return new static($body['Body'], $status, $reason);
+            return new static($body['Body'], $status, $reason,$raw);
         }
         //non-xml response, return response with empty body
-        return new static([], $status, $reason);
+        return new static([], $status, $reason, $raw);
     }
 }
